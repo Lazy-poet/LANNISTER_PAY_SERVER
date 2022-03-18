@@ -5,7 +5,10 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon --watch src/ --exec \"yarn serve\" -e ts",
-    "serve": "tsc -b && node bin/www"
+    "serve": "tsc -b && node bin/www",
+    "test": "jest --runInBand --detectOpenHandles",
+    "compile": "tsc -p ./tsconfig.json",
+    "heroku-postbuild": "yarn compile"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -15,9 +18,13 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
+    "jest": "^27.5.1",
     "joi": "^17.6.0",
     "morgan": "~1.9.1",
-    "redis": "^3.1.2"
+    "redis": "^3.1.2",
+    "supertest": "^6.2.2",
+    "ts-jest": "^27.1.3",
+    "typescript": "^4.6.2"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
@@ -25,8 +32,10 @@
     "@types/express": "^4.17.13",
     "@types/helmet": "^4.0.0",
     "@types/http-errors": "^1.8.2",
+    "@types/jest": "^27.4.1",
     "@types/joi": "^17.2.3",
     "@types/morgan": "^1.9.3",
-    "@types/redis": "^2.8.32"
+    "@types/redis": "^2.8.32",
+    "@types/supertest": "^2.0.11"
   }
 }

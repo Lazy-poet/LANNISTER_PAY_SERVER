@@ -2,9 +2,8 @@ import redis, { RedisClient } from "redis";
 import { FEE_CONFIGURATION, FEE_CONFIGURATION_WITH_SPECIFICITY } from "./types";
 import env from "./config/env.config";
 
-const REDIS_HOST = env.getValue("REDIS_HOST");
-const REDIS_PORT = env.getValue("REDIS_PORT") as unknown as number;
-const client = redis.createClient(REDIS_PORT, REDIS_HOST);
+const REDIS_URL = env.getValue("REDIS_URL");
+const client = redis.createClient(REDIS_URL);
 export default class Redis {
   client: RedisClient;
   constructor() {
@@ -13,7 +12,7 @@ export default class Redis {
   }
 
   private onConnect = () => {
-    console.log("connected to redis-server on port %s", REDIS_PORT);
+    console.log("connected to redis-server on %s", REDIS_URL);
   };
 
   public setData = async (

@@ -20,7 +20,7 @@ class AsyncError {
         await asyncFn(req, res);
       } catch (error: unknown) {
         NODE_ENV === "local" && console.log(error); //log error to console in dev mode
-        response.setError(res, 500, errorMessage);
+        return response.setError(res, 500, errorMessage);
       }
     };
   };

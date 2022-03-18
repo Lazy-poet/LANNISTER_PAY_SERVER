@@ -8,7 +8,7 @@ export default class FeeConfigurationController extends ParseConfigService {
   protected ParseConfigurationSpecsAsync = CatchAsyncError(
     async (req: Request, res: Response) => {
       if (!("FeeConfigurationSpec" in req.body)) {
-        response.setError(res, 400, "invalid request body");
+        return response.setError(res, 400, "invalid request body");
       }
       const { FeeConfigurationSpec } = req.body;
 

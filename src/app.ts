@@ -3,13 +3,10 @@ import express, { Request, Response, NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from 'cors';
-import helmet from 'helmet';
 const app = express();
 import indexRoutes from './routes';
 
-//set security http headers
 app.use(cors());
-app.use(helmet());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

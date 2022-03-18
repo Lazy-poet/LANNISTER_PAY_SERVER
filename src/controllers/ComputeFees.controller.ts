@@ -24,7 +24,7 @@ export default class ComputeTransactionFeesController extends ComputeTransaction
       );
 
       if (!matchingConfigSpec) {
-        response.setError(
+       return response.setError(
           res,
           400,
           `No fee configuration for ${req.body.PaymentEntity.Type} transactions`
