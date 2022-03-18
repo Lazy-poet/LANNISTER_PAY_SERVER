@@ -9,7 +9,7 @@ class EnvironmentVariables {
   /**
    * 
    * @param key env key to be gotten
-   * @param throwOnMissing indicates whether to throw ann error if env value isnt found
+   * @param throwOnMissing indicates whether to throw an error if env value isnt found
    * @returns corresponding environmental variable value of key provided
    */
   public getValue(key: string, throwOnMissing = true): string {

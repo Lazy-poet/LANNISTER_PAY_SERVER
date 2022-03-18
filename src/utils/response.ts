@@ -15,7 +15,6 @@ class ResponseStatus {
    *
    * @param res Response Object
    * @param statusCode success status code
-   * @param data response data if any
    * @param message optional response message
    */
   public setSuccess(

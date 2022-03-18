@@ -8,7 +8,7 @@ class AsyncError {
   /**
    *
    * @param asyncFn The async controller function
-   * @param errorMessage The error message to be sent alongside the failureResponse function if an error is caught
+   * @param errorMessage The error message to be sent if an error is caught
    * @returns an async function wrapped in the trycatch block
    */
   public catchAsyncError = (
