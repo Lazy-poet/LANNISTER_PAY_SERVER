@@ -6,7 +6,7 @@
 
 const app = require('../dist/app').default;
 const debug = require('debug')('lannister-pay:server');
-const Redis = require('../dist/redis.setup').default;
+const Redis = require('../dist/models/redis.model').default;
 const http = require('http');
 
 /**

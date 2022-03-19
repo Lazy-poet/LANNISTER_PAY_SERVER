@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 import ParseConfigService from "../services/ParseConfigurationSpecs.service";
 import CatchAsyncError from "../utils/catchAsyncError";
 import response from "../utils/response";
-import Redis from "../redis.setup";
+// import Redis from "../models/redis.model";
+import LocalDB from "../models/LocalDB.model";
 import validateFeeConfiguration from "../validations/validateFeeConfiguration";
 export default class FeeConfigurationController extends ParseConfigService {
   protected ParseConfigurationSpecsAsync = CatchAsyncError(
@@ -19,16 +20,12 @@ export default class FeeConfigurationController extends ParseConfigService {
       if (error) {
         return response.setError(res, 400, error);
       }
-      const RedisClient = new Redis();
       //save parsed config specs in redis cache
-      const resp = await RedisClient.setData("config", parsedConfigSpecs);
-
-      if (resp) {
-        response.setSuccess(res, 200, "");
-      } else {
-        response.setError(res, 400, resp);
-      }
+      // const RedisClient = new Redis();
+      // await RedisClient.setData("config", parsedConfigSpecs);
+      await new LocalDB().addDataToDB(parsedConfigSpecs);
+      response.setSuccess(res, 200, "");
     },
-    "invalid configuration spec"
+    "error parsing configuration spec"
   );
 }

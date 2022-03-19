@@ -1,10 +1,10 @@
 import redis, { RedisClient } from "redis";
-import { FEE_CONFIGURATION, FEE_CONFIGURATION_WITH_SPECIFICITY } from "./types";
-import env from "./config/env.config";
+import { FEE_CONFIGURATION, FEE_CONFIGURATION_WITH_SPECIFICITY } from "../types";
+import env from "../config/env.config";
 
 const REDIS_URL = env.getValue("REDIS_URL");
 const client = redis.createClient(REDIS_URL);
-export default class Redis {
+export default class RedisModel {
   client: RedisClient;
   constructor() {
     this.client = client;

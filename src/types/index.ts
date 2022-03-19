@@ -60,3 +60,5 @@ export type Transaction = {
     Country: string;
   };
 };
+
+export const LOCAL_DB_FILENAME = "localdb.json";

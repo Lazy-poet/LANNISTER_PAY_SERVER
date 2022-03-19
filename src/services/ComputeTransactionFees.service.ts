@@ -4,7 +4,8 @@ import {
   FEE_CONFIGURATION_WITH_SPECIFICITY,
   FEE_TYPE,
 } from "../types";
-import Redis from "../redis.setup";
+// import Redis from "../models/redis.model";
+import LocalDB from "../models/LocalDB.model";
 import match from "../utils/matchFieldValues";
 
 export default class ComputeTransactionFeesService {
@@ -42,7 +43,8 @@ export default class ComputeTransactionFeesService {
    * @returns a json object of the fee configuration specs from redis cache
    */
   protected getFeeConfigurationSpecs = async () => {
-    const feesConfiguration = await new Redis().getData("config");
+    // const feesConfiguration = await new Redis().getData("config");
+    const feesConfiguration = await new LocalDB().getDataFromDB()
     return feesConfiguration;
   };
 
