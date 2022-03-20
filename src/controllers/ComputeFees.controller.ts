@@ -4,8 +4,14 @@ import CatchAsyncError from "../utils/catchAsyncError";
 import response from "../utils/response";
 import validateTransactionPayload from "../validations/validateTransactionPayload";
 
-export default class ComputeTransactionFeesController extends ComputeTransactionFeesService {
-  protected ComputeTransactionFees = CatchAsyncError(
+class ComputeTransactionFeesController {
+  constructor(
+    private readonly computeTransactionFeesService: ComputeTransactionFeesService
+  ) {
+    this.computeTransactionFeesService = computeTransactionFeesService;
+  }
+
+  public ComputeTransactionFees = CatchAsyncError(
     async (req: Request, res: Response) => {
       // validate request body to ensure conformity
       const error = validateTransactionPayload(req.body);
@@ -13,27 +19,31 @@ export default class ComputeTransactionFeesController extends ComputeTransaction
         return response.setError(res, 400, error);
       }
 
-      const transactionConfig = this.getConfigurationFromTransactionPayload(
-        req.body
-      );
-      const feeConfigurationSpecs = await this.getFeeConfigurationSpecs();
+      const transactionConfig =
+        this.computeTransactionFeesService.getConfigurationFromTransactionPayload(
+          req.body
+        );
+      const feeConfigurationSpecs =
+        await this.computeTransactionFeesService.getFeeConfigurationSpecs();
 
-      const matchingConfigSpec = this.getMatchingConfigSpec(
-        transactionConfig,
-        feeConfigurationSpecs
-      );
+      const matchingConfigSpec =
+        this.computeTransactionFeesService.getMatchingConfigSpec(
+          transactionConfig,
+          feeConfigurationSpecs
+        );
 
       if (!matchingConfigSpec) {
-       return response.setError(
+        return response.setError(
           res,
           400,
           `No fee configuration for ${req.body.PaymentEntity.Type} transactions`
         );
       } else {
-        const transactionFee = this.computeTransactionFee(
-          matchingConfigSpec,
-          req.body.Amount
-        );
+        const transactionFee =
+          this.computeTransactionFeesService.computeTransactionFee(
+            matchingConfigSpec,
+            req.body.Amount
+          );
         const chargeAmount = req.body.Customer.BearsFee
           ? transactionFee + req.body.Amount
           : req.body.Amount;
@@ -48,3 +58,7 @@ export default class ComputeTransactionFeesController extends ComputeTransaction
     "error computing transaction fee"
   );
 }
+
+export default new ComputeTransactionFeesController(
+  new ComputeTransactionFeesService()
+);

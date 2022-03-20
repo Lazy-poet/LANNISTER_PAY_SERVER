@@ -13,7 +13,7 @@ export default class ComputeTransactionFeesService {
    * @param payload the Transaction object posted to the server
    * @returns json object representing the specs of the transaction contained in the posted request
    */
-  protected getConfigurationFromTransactionPayload = (
+  public readonly getConfigurationFromTransactionPayload = (
     payload: Transaction
   ):
     | FEE_CONFIGURATION["feeSpecs"]
@@ -42,9 +42,9 @@ export default class ComputeTransactionFeesService {
    *
    * @returns a json object of the fee configuration specs from redis cache
    */
-  protected getFeeConfigurationSpecs = async () => {
+  public readonly getFeeConfigurationSpecs = async () => {
     // const feesConfiguration = await new Redis().getData("config");
-    const feesConfiguration = await new LocalDB().getDataFromDB()
+    const feesConfiguration = await new LocalDB().getDataFromDB();
     return feesConfiguration;
   };
 
@@ -54,7 +54,7 @@ export default class ComputeTransactionFeesService {
    * @param configSpecs array of all available fee configuration specs
    * @returns a matching configSpec or undefined
    */
-  protected getMatchingConfigSpec = (
+  public readonly getMatchingConfigSpec = (
     transactionConfig:
       | FEE_CONFIGURATION["feeSpecs"]
       | { entityProperties: (string | number)[] },
@@ -99,7 +99,7 @@ export default class ComputeTransactionFeesService {
    * @param transactionAmount the original transaction amount
    * @returns the computed charge based on the fee type and value
    */
-  protected computeTransactionFee = (
+  public readonly computeTransactionFee = (
     feeConfig: FEE_CONFIGURATION_WITH_SPECIFICITY,
     transactionAmount: number
   ) => {

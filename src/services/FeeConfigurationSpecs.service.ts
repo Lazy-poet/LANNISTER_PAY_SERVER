@@ -10,7 +10,7 @@ export default class ParseConfigService {
    * @param feeSpecs the fee configuration spec
    * @returns a value indicating the specificity of a particular specification
    */
-  protected getConfigSpecificity = (
+  private readonly getConfigSpecificity = (
     feeSpecs: FEE_CONFIGURATION["feeSpecs"]
   ): SPECIFICITY => {
     //mimimum specificity should be value of SPECIFICITY.LEAST_SPECIFIC ( 0 in this case), hence the Math.max wrapper
@@ -32,7 +32,7 @@ export default class ParseConfigService {
    * @param configSpecs input config spec string from request body
    * @returns formatted JSON object of config specs
    */
-  protected parseConfigSpecIntoJSON = (
+  public readonly parseConfigSpecIntoJSON = (
     configSpecs: any
   ): FEE_CONFIGURATION_WITH_SPECIFICITY[] => {
     return (
