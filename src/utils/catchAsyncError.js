@@ -1,5 +1,4 @@
-import { Request, Response } from "express";
-import response from "../utils/response";
+import response from "./response";
 import env from "../config/env.config";
 
 const NODE_ENV = env.getValue("NODE_ENV");
@@ -11,14 +10,14 @@ class AsyncError {
    * @param errorMessage The error message to be sent if an error is caught
    * @returns an async function wrapped in the trycatch block
    */
-  public catchAsyncError = (
-    asyncFn: (req: Request, res: Response) => Promise<void>,
-    errorMessage: string
+  catchAsyncError = (
+    asyncFn,
+    errorMessage
   ) => {
-    return async (req: Request, res: Response) => {
+    return async (req, res) => {
       try {
         await asyncFn(req, res);
-      } catch (error: unknown) {
+      } catch (error) {
         NODE_ENV === "local" && console.log(error); //log error to console in dev mode
         return response.setError(res, 500, errorMessage);
       }

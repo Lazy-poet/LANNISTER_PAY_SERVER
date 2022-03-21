@@ -1,9 +1,9 @@
 import 'dotenv/config';
 
 class EnvironmentVariables {
-  private env: { [k: string]: string | undefined };
-  constructor(env: NodeJS.ProcessEnv) {
-    this.env = env;
+  #env;
+  constructor(env) {
+    this.#env = env;
   }
 
   /**
@@ -12,8 +12,8 @@ class EnvironmentVariables {
    * @param throwOnMissing indicates whether to throw an error if env value isnt found
    * @returns corresponding environmental variable value of key provided
    */
-  public getValue(key: string, throwOnMissing = true): string {
-    const value = this.env[key] || '';
+  getValue(key, throwOnMissing = true) {
+    const value = this.#env[key] || '';
     if (!value && throwOnMissing) {
       throw new Error(
         `\tmissing env.${key} in .env file\n`

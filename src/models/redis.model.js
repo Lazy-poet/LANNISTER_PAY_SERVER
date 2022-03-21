@@ -1,24 +1,22 @@
 import redis, { RedisClient } from "redis";
-import { FEE_CONFIGURATION, FEE_CONFIGURATION_WITH_SPECIFICITY } from "../types";
-import env from "../config/env.config";
+import env from "../config/env.config.js";
 
 const REDIS_URL = env.getValue("REDIS_URL");
 const client = redis.createClient(REDIS_URL);
 export default class RedisModel {
-  client: RedisClient;
   constructor() {
     this.client = client;
     this.client.on("connect", this.onConnect);
   }
 
-  private onConnect = () => {
+  onConnect = () => {
     console.log("connected to redis-server on %s", REDIS_URL);
   };
 
-  public setData = async (
-    key: string,
-    data: FEE_CONFIGURATION[]
-  ): Promise<string> => {
+  setData = async (
+    key,
+    data
+  ) => {
     return new Promise((resolve, reject) => {
       this.client.set(key, JSON.stringify(data), (err) => {
         if (err) {
@@ -29,15 +27,15 @@ export default class RedisModel {
     });
   };
 
-  public getData = (
-    key: string
-  ): Promise<FEE_CONFIGURATION_WITH_SPECIFICITY[]> => {
+  getData = (
+    key
+  ) => {
     return new Promise((resolve, reject) => {
-      this.client.get(key, (err: Error | null, reply: string | null) => {
+      this.client.get(key, (err, reply) => {
         if (reply) {
           resolve(JSON.parse(reply));
         }
-        reject(err?.message);
+        reject(err.message);
       });
     });
   };

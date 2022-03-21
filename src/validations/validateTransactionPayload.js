@@ -1,7 +1,6 @@
 import Joi from "joi";
-import { Transaction } from "../types";
 
-export default (data: Transaction) => {
+export default (data) => {
   const schema = Joi.object({
     ID: Joi.number().required(),
     Amount: Joi.number().required(),

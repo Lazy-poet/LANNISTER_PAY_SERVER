@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import FeeConfigurationService from "../services/FeeConfigurationSpecs.service";
 import CatchAsyncError from "../utils/catchAsyncError";
 import response from "../utils/response";
@@ -7,21 +6,22 @@ import LocalDB from "../models/LocalDB.model";
 import validateFeeConfiguration from "../validations/validateFeeConfiguration";
 
 class FeeConfigurationController {
+  #feeConfigurationService;
   constructor(
-    private readonly feeConfigurationService: FeeConfigurationService
+    feeConfigurationService
   ) {
-    this.feeConfigurationService = feeConfigurationService;
+    this.#feeConfigurationService = feeConfigurationService;
   }
 
-  public readonly ParseConfigurationSpecsAsync = CatchAsyncError(
-    async (req: Request, res: Response) => {
+  ParseConfigurationSpecsAsync = CatchAsyncError(
+    async (req, res) => {
       if (!("FeeConfigurationSpec" in req.body)) {
         return response.setError(res, 400, "invalid request body");
       }
       const { FeeConfigurationSpec } = req.body;
 
       const parsedConfigSpecs =
-        this.feeConfigurationService.parseConfigSpecIntoJSON(
+        this.#feeConfigurationService.parseConfigSpecIntoJSON(
           FeeConfigurationSpec
         );
 

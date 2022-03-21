@@ -4,11 +4,11 @@
  * Module dependencies.
  */
 
-const app = require('../dist/app').default;
-const debug = require('debug')('lannister-pay:server');
-const Redis = require('../dist/models/redis.model').default;
-const http = require('http');
-
+import app from '../src/app.js';
+import dbg from 'debug';
+import Redis from '../src/models/redis.model.js';
+import { createServer } from 'http';
+const debug = dbg('lannister-pay:server');
 /**
  * Get port from environment and store in Express.
  */
@@ -20,7 +20,7 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-const server = http.createServer(app);
+const server = createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.

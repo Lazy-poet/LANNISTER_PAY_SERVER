@@ -1,9 +1,5 @@
-import { Response } from "express";
 
 class ResponseStatus {
-  statusCode: number | null;
-  status: "ok" | "failed" | null;
-  message: string | null;
 
   constructor() {
     this.statusCode = null;
@@ -17,15 +13,15 @@ class ResponseStatus {
    * @param statusCode success status code
    * @param message optional response message
    */
-  public setSuccess(
-    res: Response,
-    statusCode: number,
-    message: string | null
-  ): void {
+  setSuccess(
+    res,
+    statusCode,
+    message
+  ) {
     this.statusCode = statusCode;
     this.status = "ok";
     this.message = message;
-    this.send(res);
+    this.#send(res);
   }
 
   /**
@@ -34,18 +30,15 @@ class ResponseStatus {
    * @param statusCode error status code
    * @param message error message
    */
-  public setError(res: Response, statusCode: number, message: string): void {
+  setError(res, statusCode, message) {
     this.statusCode = statusCode;
     this.status = "failed";
     this.message = message;
-    this.send(res);
+    this.#send(res);
   }
 
-  private send(res: Response): Response {
-    const result: {
-      status: "ok" | "failed" | null;
-      message?: string;
-    } = {
+  #send = (res) => {
+    const result = {
       status: this.status,
     };
     if (this.message) result.message = this.message;

@@ -1,7 +1,6 @@
 import Joi from "joi";
-import { FEE_CONFIGURATION_WITH_SPECIFICITY } from "../types";
 
-export default (data: FEE_CONFIGURATION_WITH_SPECIFICITY[]) => {
+export default (data) => {
   const configSchema = Joi.object({
     feeId: Joi.string().required(),
     feeSpecs: Joi.object()

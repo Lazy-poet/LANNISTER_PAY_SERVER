@@ -1,11 +1,13 @@
 import {
   LOCAL_DB_FILENAME,
-  FEE_CONFIGURATION_WITH_SPECIFICITY,
 } from "../types";
 import fs from "fs";
-import path from "path";
+import path,  { dirname }  from "path";
+import { fileURLToPath } from 'url';
 import { promisify } from "util";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const writeFileAsync = promisify(fs.writeFile);
 const readFileAsync = promisify(fs.readFile);
 const dataDirectory = path.join(__dirname, "../data");
@@ -16,14 +18,14 @@ export default class LocalDBModel {
       fs.mkdirSync(dataDirectory);
     }
   }
-  public addDataToDB = async (data: FEE_CONFIGURATION_WITH_SPECIFICITY[]) => {
+  addDataToDB = async (data) => {
     await writeFileAsync(
       path.join(dataDirectory, LOCAL_DB_FILENAME),
       JSON.stringify(data, null, 2)
     );
   };
 
-  public getDataFromDB = async () => {
+  getDataFromDB = async () => {
     const data = await readFileAsync(
       path.join(dataDirectory, LOCAL_DB_FILENAME),
       "utf-8"

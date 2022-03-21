@@ -1,18 +1,17 @@
-import { Request, Response } from "express";
 import ComputeTransactionFeesService from "../services/ComputeTransactionFees.service";
 import CatchAsyncError from "../utils/catchAsyncError";
 import response from "../utils/response";
 import validateTransactionPayload from "../validations/validateTransactionPayload";
 
 class ComputeTransactionFeesController {
-  constructor(
-    private readonly computeTransactionFeesService: ComputeTransactionFeesService
-  ) {
-    this.computeTransactionFeesService = computeTransactionFeesService;
+  #computeTransactionFeesService;
+
+  constructor(computeTransactionFeesService) {
+    this.#computeTransactionFeesService = computeTransactionFeesService;
   }
 
-  public ComputeTransactionFees = CatchAsyncError(
-    async (req: Request, res: Response) => {
+  ComputeTransactionFees = CatchAsyncError(
+    async (req, res) => {
       // validate request body to ensure conformity
       const error = validateTransactionPayload(req.body);
       if (error) {
@@ -20,14 +19,14 @@ class ComputeTransactionFeesController {
       }
 
       const transactionConfig =
-        this.computeTransactionFeesService.getConfigurationFromTransactionPayload(
+        this.#computeTransactionFeesService.getConfigurationFromTransactionPayload(
           req.body
         );
       const feeConfigurationSpecs =
-        await this.computeTransactionFeesService.getFeeConfigurationSpecs();
+        await this.#computeTransactionFeesService.getFeeConfigurationSpecs();
 
       const matchingConfigSpec =
-        this.computeTransactionFeesService.getMatchingConfigSpec(
+        this.#computeTransactionFeesService.getMatchingConfigSpec(
           transactionConfig,
           feeConfigurationSpecs
         );
@@ -40,7 +39,7 @@ class ComputeTransactionFeesController {
         );
       } else {
         const transactionFee =
-          this.computeTransactionFeesService.computeTransactionFee(
+          this.#computeTransactionFeesService.computeTransactionFee(
             matchingConfigSpec,
             req.body.Amount
           );

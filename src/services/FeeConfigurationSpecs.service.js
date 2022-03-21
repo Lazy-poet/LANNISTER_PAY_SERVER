@@ -1,7 +1,5 @@
 import {
-  FEE_CONFIGURATION,
   SPECIFICITY,
-  FEE_CONFIGURATION_WITH_SPECIFICITY,
 } from "../types";
 
 export default class ParseConfigService {
@@ -10,13 +8,13 @@ export default class ParseConfigService {
    * @param feeSpecs the fee configuration spec
    * @returns a value indicating the specificity of a particular specification
    */
-  private readonly getConfigSpecificity = (
-    feeSpecs: FEE_CONFIGURATION["feeSpecs"]
-  ): SPECIFICITY => {
+  #getConfigSpecificity = (
+    feeSpecs
+  ) => {
     //mimimum specificity should be value of SPECIFICITY.LEAST_SPECIFIC ( 0 in this case), hence the Math.max wrapper
     return Math.max(
-      (Object.keys(feeSpecs) as (keyof FEE_CONFIGURATION["feeSpecs"])[]).reduce(
-        (total: number, item: keyof FEE_CONFIGURATION["feeSpecs"]) => {
+      Object.keys(feeSpecs).reduce(
+        (total, item) => {
           // specificity is determined based on the number of values that aren't wildcards (*);
           total += Number(feeSpecs[item] !== "*");
           return total;
@@ -32,20 +30,20 @@ export default class ParseConfigService {
    * @param configSpecs input config spec string from request body
    * @returns formatted JSON object of config specs
    */
-  public readonly parseConfigSpecIntoJSON = (
-    configSpecs: any
-  ): FEE_CONFIGURATION_WITH_SPECIFICITY[] => {
+  parseConfigSpecIntoJSON = (
+    configSpecs
+  ) => {
     return (
       configSpecs
         .split("\n")
-        .map((configSpec: string) =>
+        .map((configSpec) =>
           configSpec
             .split(" : APPLY ")
             .join("")
             .replace(/[\(\)]/g, " ")
             .split(" ")
         )
-        .map((config: string[]) => ({
+        .map((config) => ({
           feeId: config[0],
           feeSpecs: {
             feeCurrency: config[1],
@@ -58,15 +56,15 @@ export default class ParseConfigService {
             feeValue: config[6],
           },
         }))
-        .map((config: FEE_CONFIGURATION) => ({
+        .map((config) => ({
           ...config,
-          specificity: this.getConfigSpecificity(config.feeSpecs),
+          specificity: this.#getConfigSpecificity(config.feeSpecs),
         }))
         //sort by specificity inn descending order so that the spec with highest specificity is encountered first when finding through the array
         .sort(
           (
-            a: FEE_CONFIGURATION_WITH_SPECIFICITY,
-            b: FEE_CONFIGURATION_WITH_SPECIFICITY
+            a,
+            b
           ) => b.specificity - a.specificity
         )
     );
